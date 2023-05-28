@@ -97,8 +97,8 @@ data "aws_eks_cluster_auth" "eks_cluster_auth" {
 
 # Create IAM OpenID Connect (OIDC) provider
 resource "aws_iam_openid_connect_provider" "oidc_provider" {
-  url                = data.aws_eks_cluster_auth.eks_cluster_auth[*].identity[0].oidc[0].issuer
+  url                = data.aws_eks_cluster_auth.eks_cluster_auth[0].endpoint
   client_id_list     = ["sts.amazonaws.com"]
-  thumbprint_list    = data.aws_eks_cluster_auth.eks_cluster_auth[*].identity[0].oidc[0].issuer_certificate_authority[0].thumbprint_list
+  thumbprint_list    = data.aws_eks_cluster_auth.eks_cluster_auth[0].identity[0].oidc[0].issuer_certificate_authority[0].thumbprint_list
 }
 
