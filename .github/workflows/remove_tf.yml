@@ -1,0 +1,22 @@
+name: Remove Terraform Resources
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  remove-terraform-resources:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
