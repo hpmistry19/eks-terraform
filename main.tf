@@ -90,10 +90,14 @@ resource "aws_eks_cluster" "eks_cluster" {
   }
 }
 
-# Create IAM OpenID Connect (OIDC) provider
-resource "aws_iam_openid_connect_provider" "oidc_provider" {
-  url                = aws_eks_cluster.eks_cluster.identity.0.oidc.0.issuer
-  client_id_list     = ["sts.amazonaws.com"]
-  thumbprint_list    = aws_eks_cluster.eks_cluster.identity.0.oidc.0.thumbprint_list
+# Retrieve EKS cluster data
+data "aws_eks_cluster" "eks_cluster_data" {
+  name = aws_eks_cluster.eks_cluster.name
 }
 
+# Create IAM OpenID Connect (OIDC) provider
+resource "aws_iam_openid_connect_provider" "oidc_provider" {
+  url                = data.aws_eks_cluster.eks_cluster_data.identity.0.oidc.0.issuer
+  client_id_list     = ["sts.amazonaws.com"]
+  thumbprint_list    = data.aws_eks_cluster.eks_cluster_data.identity.0.oidc.0.issuer_certificate_authority.0.thumbprint_list
+}
