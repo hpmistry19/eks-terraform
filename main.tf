@@ -77,9 +77,9 @@ resource "aws_iam_role_policy_attachment" "eks_service_policy_attachment" {
 
 # Create EKS cluster
 resource "aws_eks_cluster" "eks_cluster" {
-  name     = "eks-cluster"
-  role_arn = aws_iam_role.eks_cluster_role.arn
-  version  = "1.21"  # Replace with your desired EKS version
+  name               = "eks-cluster"
+  role_arn           = aws_iam_role.eks_cluster_role.arn
+  version            = "1.21"  # Replace with your desired EKS version
   vpc_config {
     subnet_ids         = [aws_subnet.eks_subnet.id]
     security_group_ids = [aws_security_group.eks_sg.id]
@@ -88,16 +88,6 @@ resource "aws_eks_cluster" "eks_cluster" {
   tags = {
     Name = "eks-cluster"
   }
-
-  # Add the OIDC provider configuration
-  oidc_provider {
-    enabled = true
-  }
-
-  depends_on = [
-    aws_iam_role_policy_attachment.eks_cluster_policy_attachment,
-    aws_iam_role_policy_attachment.eks_service_policy_attachment
-  ]
 }
 
 # Create IAM OpenID Connect (OIDC) provider
